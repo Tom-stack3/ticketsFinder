@@ -88,6 +88,7 @@ def main():
     minutes_to_run = input("Time to keep checking (in minutes):")
     while not minutes_to_run.isnumeric() or int(minutes_to_run) > 34 * 60:
         minutes_to_run = input("Time to keep checking (in minutes):")
+    print()
     email_addresses = input("Email addresses to send alerts to (separated by commas):\n")
     recipients = [email.strip() for email in email_addresses.split(',')]
 
