@@ -64,3 +64,6 @@ To find your System PATHs:
  That's it!
  Have fun in skiing in the Hermon :)
 
+## Run example:
+
+![run example](https://raw.githubusercontent.com/Tom-stack3/ticketsFinder/main/img/run_example.png)  
