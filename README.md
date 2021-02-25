@@ -50,7 +50,7 @@ To find your System PATHs:
    # change this to an email you want the alerts of the bot to be sent from
    email_address = 'example@gmail.com'
    # change this to the password for the email you chose
-   email_pass = 'pass'
+   email_pass = 'password_example'
    ```
    So before running the script, you need to fill in a working gmail and a password you want the program to send the alerts from.
  
