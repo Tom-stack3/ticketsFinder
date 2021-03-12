@@ -17,8 +17,8 @@ If an email was sent (if we found some tickets), we wait 10 minutes before check
 
 ### Instalations: ###
 **Libraries used**:  
-1. selenium - ```pip install selenium```
-2. Beautiful Soup - ```pip install beautifulsoup4```
+1. selenium - ```python -m pip install selenium```
+2. Beautiful Soup - ```python -m pip install beautifulsoup4```
 
  **Selenium setup:**
 * The script works with selenium Firefox, so inorder to run the script,
