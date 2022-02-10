@@ -20,32 +20,17 @@ If an email was sent (if available tickets were found), the script waits 10 minu
 1. Selenium - ```pip install selenium```
 2. Beautiful Soup - ```pip install beautifulsoup4```
 
-**Selenium setup:**
+#### Selenium setup:
 The script works with selenium Firefox, so Firefox needs to be installed.
-#### Linux:
+##### Linux:
 In order to work with the selenium firefox-geckodriver, it needs to be installed:
 ```shell
 sudo apt-get install firefox-geckodriver
 ```
-#### Windows:
+##### Windows:
 To work with the selenium firefox-geckodriver, it can be installed [here](https://github.com/mozilla/geckodriver/releases/tag/v0.29.0).\
-After installing and extracting the geckodriver.exe, put it in one of System PATHs.
-To find your System PATHs:
+After installing and extracting the geckodriver.exe, copy it into one of your System paths.
 
-*from: https://www.mathworks.com/matlabcentral/answers/94933-how-do-i-edit-my-system-path-in-windows*
-
-In Windows, environment variables can be accessed from “Advanced system settings” on the left side of the “System” control panel.
-How you access and edit the environment variables depends on the version of Windows you are using.\
-**Windows 10 (Also Windows 8.1):**
-  1. Right-click on the Start Button
-  2. Select “System” from the context menu.
-  3. Click “Advanced system settings”
-  4. Go to the “Advanced” tab
-  5. Click “Environment Variables…”
-  6. Click variable called “Path” and click “Edit…”
-
-Now choose one of the PATHs shown, (the python one is preferred) and just copy geckodriver.exe there.
-  
  ### Code setup:
    The program sends alerts to the emails specified in the beginning of the run.\
    Change the following lines in the `config.yaml` file: (lines 2-3)
@@ -58,7 +43,7 @@ Now choose one of the PATHs shown, (the python one is preferred) and just copy g
  
  ## Running the script:
  After the setup, just run the python script.\
- Enter the time in minutes you want the scriot to keep checking for tickets.\
+ Enter the time in minutes you want the script to keep checking for tickets.\
  Then enter the email addresses you want to be alerted separated by a comma.\
  Like this:\
  ``` mail.1@mail.com, example@example.com, cr7@real.madrid```
