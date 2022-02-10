@@ -1,0 +1,8 @@
+# ==== Email settings ====
+email_address: example@mail.com
+email_password: password_example
+
+# ==== Inner settings ====
+tickets_url: https://hermon.pres.global/vouchers
+closed_keyword: אזל
+success_keyword: יש
