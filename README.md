@@ -1,4 +1,4 @@
-# Tickets Finder
+# Hermon Tickets Finder
 *ticketsFinder* is a Python script that looks for available tickets for Mount Hermon
 and sends an alert in Real-Time to all the emails interested.\
 It looks for available tickets in all the dates available for sale.
@@ -16,12 +16,12 @@ If an email was sent (if available tickets were found), the script waits 10 minu
 ## Setup before run:
 
 ### Installations:
-**Libraries used**:  
+**Libraries used:**
 1. selenium - ```pip install selenium```
 2. Beautiful Soup - ```pip install beautifulsoup4```
 
- **Selenium setup:**
-The script works with selenium Firefox, so inorder to run the script,
+**Selenium setup:**
+The script works with selenium Firefox, so inorder for the script to run,
 Firefox needs the be installed.
 #### Linux:
 In order to work with the selenium firefox-geckodriver, it needs to be installed:
@@ -29,23 +29,23 @@ In order to work with the selenium firefox-geckodriver, it needs to be installed
 sudo apt-get install firefox-geckodriver
 ```
 #### Windows:
-* To work with selenium.webdriver, [geckodriver](https://github.com/mozilla/geckodriver/releases/tag/v0.29.0) needs to be installed.\
+To work with the selenium firefox-geckodriver, it can be installed [here](https://github.com/mozilla/geckodriver/releases/tag/v0.29.0).\
 After installing and extracting the geckodriver.exe, put it in one of System PATHs.
 To find your System PATHs:
 
-  *from: https://www.mathworks.com/matlabcentral/answers/94933-how-do-i-edit-my-system-path-in-windows*
+*from: https://www.mathworks.com/matlabcentral/answers/94933-how-do-i-edit-my-system-path-in-windows*
 
-  In Windows, environment variables can be accessed from “Advanced system settings” on the left side of the “System” control panel.
-  How you access and edit the environment variables depends on the version of Windows you are using.\
-  **Windows 10 (Also Windows 8.1):**
-    1. Right-click on the Start Button
-    2. Select “System” from the context menu.
-    3. Click “Advanced system settings”
-    4. Go to the “Advanced” tab
-    5. Click “Environment Variables…”
-    6. Click variable called “Path” and click “Edit…”
-    
-  Now choose one of the PATHs shown, (the python one is prefered) and just copy geckodriver.exe there.
+In Windows, environment variables can be accessed from “Advanced system settings” on the left side of the “System” control panel.
+How you access and edit the environment variables depends on the version of Windows you are using.\
+**Windows 10 (Also Windows 8.1):**
+  1. Right-click on the Start Button
+  2. Select “System” from the context menu.
+  3. Click “Advanced system settings”
+  4. Go to the “Advanced” tab
+  5. Click “Environment Variables…”
+  6. Click variable called “Path” and click “Edit…”
+
+Now choose one of the PATHs shown, (the python one is prefered) and just copy geckodriver.exe there.
   
  ### Code setup:
    The program sends alerts to the emails specified in the begining of the run.\
