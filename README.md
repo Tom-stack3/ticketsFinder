@@ -17,12 +17,11 @@ If an email was sent (if available tickets were found), the script waits 10 minu
 
 ### Installations:
 **Libraries used:**
-1. selenium - ```pip install selenium```
+1. Selenium - ```pip install selenium```
 2. Beautiful Soup - ```pip install beautifulsoup4```
 
 **Selenium setup:**
-The script works with selenium Firefox, so inorder for the script to run,
-Firefox needs the be installed.
+The script works with selenium Firefox, so Firefox needs to be installed.
 #### Linux:
 In order to work with the selenium firefox-geckodriver, it needs to be installed:
 ```shell
@@ -45,10 +44,10 @@ How you access and edit the environment variables depends on the version of Wind
   5. Click “Environment Variables…”
   6. Click variable called “Path” and click “Edit…”
 
-Now choose one of the PATHs shown, (the python one is prefered) and just copy geckodriver.exe there.
+Now choose one of the PATHs shown, (the python one is preferred) and just copy geckodriver.exe there.
   
  ### Code setup:
-   The program sends alerts to the emails specified in the begining of the run.\
+   The program sends alerts to the emails specified in the beginning of the run.\
    Change the following lines in the `config.yaml` file: (lines 2-3)
    ```yaml
    # ===== Email settings =====
@@ -60,8 +59,8 @@ Now choose one of the PATHs shown, (the python one is prefered) and just copy ge
  ## Running the script:
  After the setup, just run the python script.\
  Enter the time in minutes you want the scriot to keep checking for tickets.\
- Then enter the email addresses you want to be alerted seperated by a comma.\
- like this:\
+ Then enter the email addresses you want to be alerted separated by a comma.\
+ Like this:\
  ``` mail.1@mail.com, example@example.com, cr7@real.madrid```
  
  That's it!
