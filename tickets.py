@@ -21,7 +21,6 @@ opts = Options()
 # if operating in headless mode
 if config["headless"]:
     opts.headless = True
-    assert opts.headless
 
 
 def get_soup_of_page(url: str) -> BeautifulSoup:
@@ -130,8 +129,9 @@ def main() -> None:
         dates_available = find_available_tickets()
         # if list not empty, means we found some tickets
         if dates_available:
-            print('dates_available', dates_available)
+            # inform the recipients
             send_email(recipients, dates_available)
+
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_find > end_time:
                 break
