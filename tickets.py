@@ -31,6 +31,7 @@ def get_soup_of_page(url: str) -> BeautifulSoup:
     browser = Firefox(options=opts)
     browser.get(url)
     # wait for the calendar to appear
+    # solution from: http://allselenium.info/wait-for-elements-python-selenium-webdriver/
     wait = WebDriverWait(browser, 10)
     wait.until(ec.visibility_of_element_located(
         (By.XPATH, "//div[@class='v-calendar-weekly__day-label']")))
@@ -40,9 +41,9 @@ def get_soup_of_page(url: str) -> BeautifulSoup:
     return soup
 
 
-def find_available_tickets():
+def find_available_tickets() -> list:
     """
-    Find available tickets.
+    Find and return a list of available dates.
     """
     today = datetime.date.today()
     soup = get_soup_of_page(config["tickets_url"])
@@ -66,7 +67,7 @@ def find_available_tickets():
     return dates_available
 
 
-def generate_email_body(dates_available):
+def generate_email_body(dates_available) -> str:
     """
     Generate the email body.
     """
@@ -83,7 +84,7 @@ Checked at: {today.strftime("%X %d/%m/%Y")}
     return text
 
 
-def send_email(recipients, dates_available):
+def send_email(recipients, dates_available) -> None:
     """
     Send an email with the available tickets to the specified recipients.
     """
@@ -106,7 +107,7 @@ def send_email(recipients, dates_available):
     server.quit()
 
 
-def main():
+def main() -> None:
     # here we get the params to run with.
     minutes_to_run = input("Time to keep checking (in minutes):")
     while not minutes_to_run.isnumeric() or int(minutes_to_run) > 34 * 60:
