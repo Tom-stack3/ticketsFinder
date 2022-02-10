@@ -3,6 +3,9 @@
 import datetime
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import time
 import smtplib
@@ -14,25 +17,37 @@ import yaml
 with open('config.yaml', 'r') as input_file:
     config = yaml.load(input_file, yaml.FullLoader)
 
-# we get the html of the page using selenium.
-# we use selenium inorder to load the page after the javascript had already ran and the calendar shows up.
-# then we use BeautifulSoup to work easily with the html loaded.
-def get_soup_page(url):
-    opts = Options()
+opts = Options()
+# if operating in headless mode
+if config["headless"]:
     opts.headless = True
-    assert opts.headless  # Operating in headless mode
+    assert opts.headless
+
+
+def get_soup_of_page(url: str) -> BeautifulSoup:
+    """
+    Get the html of the page using Selenium, load the html into a BeatifulSoup object and return it.
+    """
     browser = Firefox(options=opts)
     browser.get(url)
+    # wait for the calendar to appear
+    wait = WebDriverWait(browser, 10)
+    wait.until(ec.visibility_of_element_located(
+        (By.XPATH, "//div[@class='v-calendar-weekly__day-label']")))
+
     soup = BeautifulSoup(browser.page_source, "html.parser")
     browser.close()
     return soup
 
 
-def find_available():
+def find_available_tickets():
+    """
+    Find available tickets.
+    """
     today = datetime.date.today()
-    soup = get_soup_page(config["tickets_url"])
+    soup = get_soup_of_page(config["tickets_url"])
     dates_available = []
-    for day_index in range(0, 5 * 7):
+    for day_index in range(1, 5 * 7):
         date = today + datetime.timedelta(days=day_index)
         # format: 2021-02-06
         date_in_format = date.strftime("%Y-%m-%d")
@@ -40,9 +55,9 @@ def find_available():
         # if the day doesn't exist - means we got to the end of the calendar.
         if search_result is None:
             break
+        # if there are no tickets for sale for that day
         if config["closed_keyword"] in str(search_result):
             continue
-
         elif config["success_keyword"] in str(search_result):
             print(date_in_format, 'HERE!!')
             dates_available.append(date_in_format)
@@ -51,33 +66,42 @@ def find_available():
     return dates_available
 
 
-# we generate the content of the email.
-# we send a list of the dates available, the link to buy the tickets,
-# and the current time and date
-def email_content(dates_available):
+def generate_email_body(dates_available):
+    """
+    Generate the email body.
+    """
     today = datetime.datetime.now()
     text = 'Available dates:\n'
     for date in dates_available:
         text += date + '\n'
-    text += '\nlink to buy: ' + config["tickets_url"]
-    text += '\n\ntime checked: ' + today.strftime("%X %d/%m/%Y")
+    text += f"""\
+
+Buy tickets here: {config["tickets_url"]}
+
+Checked at: {today.strftime("%X %d/%m/%Y")}
+    """
     return text
 
 
-# send the email with the available tickets to the recipients
-def send_mail(recipients, dates_available):
-    body = email_content(dates_available)
+def send_email(recipients, dates_available):
+    """
+    Send an email with the available tickets to the specified recipients.
+    """
+    # generate the email body
+    body = generate_email_body(dates_available)
+
     msg = MIMEMultipart()
 
     msg['Subject'] = 'Found available tickets to Hermon!'
     msg['From'] = config["email_address"]
     msg['Bcc'] = ', '.join(recipients)
 
+    # add the body to the body of the email
     msg.attach(MIMEText(body, 'plain'))
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(config["email_address"], config["email_pass"])
+    server.login(config["email_address"], config["email_password"])
     server.send_message(msg)
     server.quit()
 
@@ -102,11 +126,11 @@ def main():
     start_time = time.time()
     end_time = start_time + 60 * int(minutes_to_run)
     while time.time() < end_time:
-        dates_available = find_available()
+        dates_available = find_available_tickets()
         # if list not empty, means we found some tickets
         if dates_available:
             print('dates_available', dates_available)
-            send_mail(recipients, dates_available)
+            send_email(recipients, dates_available)
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_find > end_time:
                 break
