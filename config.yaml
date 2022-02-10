@@ -12,6 +12,8 @@ wait_after_find: 600
 # time to wait before searching again after not finding tickets (in seconds)
 wait_after_search: 30
 
+headless: True
+
 # ===== Logger settings =====
 # separator for logging
 separator: =====
