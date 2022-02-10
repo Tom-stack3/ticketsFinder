@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import yaml
 
+# load the configuration settings
 with open('config.yaml', 'r') as input_file:
     config = yaml.load(input_file, yaml.FullLoader)
 
@@ -41,7 +42,7 @@ def find_available():
             break
         if config["closed_keyword"] in str(search_result):
             continue
-            # print(date_in_format, ':(')
+
         elif config["success_keyword"] in str(search_result):
             print(date_in_format, 'HERE!!')
             dates_available.append(date_in_format)
@@ -91,13 +92,11 @@ def main():
         "Email addresses to send alerts to (separated by commas):\n")
     recipients = [email.strip() for email in email_addresses.split(',')]
 
-    # the time to wait before searching for tickets again after finding.
-    # in seconds
-    wait_time_after_finding = 600
+    # time to wait before searching again after finding tickets (in seconds)
+    wait_after_find = config["wait_after_find"]
 
-    # the time to wait after searching for tickets (and didn't find) before searching again.
-    # in seconds
-    wait_time_after_search = 30
+    # time to wait before searching again after not finding tickets (in seconds)
+    wait_after_search = config["wait_after_search"]
 
     print("\n--- started search ---\n")
     start_time = time.time()
@@ -108,15 +107,15 @@ def main():
         if dates_available:
             print('dates_available', dates_available)
             send_mail(recipients, dates_available)
-            # if there is no time left, we can save the wait
-            if time.time() + wait_time_after_finding > end_time:
+            # if there is no time left, there is no need to wait
+            if time.time() + wait_after_find > end_time:
                 break
-            time.sleep(wait_time_after_finding)
+            time.sleep(wait_after_find)
         else:
-            # if there is no time left, we can save the wait
-            if time.time() + wait_time_after_search > end_time:
+            # if there is no time left, there is no need to wait
+            if time.time() + wait_after_search > end_time:
                 break
-            time.sleep(wait_time_after_search)
+            time.sleep(wait_after_search)
     print("\n--- search ended ---\n")
     print("run ended after:", (time.time() - start_time) / 60, "minutes")
 
