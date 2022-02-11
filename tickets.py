@@ -18,14 +18,6 @@ import sys
 config = {}
 opts = Options()
 
-# load the configuration settings
-with open('config.yaml', 'r') as input_file:
-    config = yaml.load(input_file, yaml.FullLoader)
-
-# if operating in headless mode
-if config["headless"]:
-    opts.headless = True
-
 
 def get_soup_of_page(url: str) -> BeautifulSoup:
     """
@@ -122,6 +114,8 @@ def parse_args():
     Parse the arguments from the command line.
     """
     args_list = sys.argv[1:]
+    global config
+    global opts
 
     # short options
     short_options = "ht:r:vd"
@@ -130,7 +124,6 @@ def parse_args():
 
     config_path = "config.yaml"
     specified_config = {}
-
     # parse the arguments
     try:
         arguments, values = getopt.getopt(
@@ -165,6 +158,18 @@ def parse_args():
         print(f"Error parsing the arguments! {err}")
         usage()
         sys.exit(2)
+
+    # load the right configuration file
+    with open(config_path, 'r') as input_file:
+        config = yaml.load(input_file, yaml.FullLoader)
+
+    # update the configuration with the specified options
+    for arg, val in specified_config.items():
+        config[arg] = val
+
+    # if operating in headless mode
+    if config["headless"]:
+        opts.headless = True
 
 
 def main() -> None:
