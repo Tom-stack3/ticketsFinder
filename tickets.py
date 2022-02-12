@@ -67,10 +67,10 @@ def find_available_tickets() -> list:
         if config["closed_keyword"] in str(search_result):
             continue
         elif config["success_keyword"] in str(search_result):
-            print(date_in_format, 'HERE!!')
+            log(f"{date_in_format} has tickets for sale!")
             dates_available.append(date_in_format)
         else:
-            print(date_in_format, 'failed')
+            log(f"Failed to get information on {date_in_format}!")
     return dates_available
 
 
@@ -216,6 +216,9 @@ def main() -> None:
     start_time = time.time()
     end_time = start_time + 60 * int(minutes_to_run)
     while time.time() < end_time:
+        # print an empty line
+        print()
+        # get a list of available dates
         dates_available = find_available_tickets()
         # if list not empty, means we found some tickets
         if dates_available:
