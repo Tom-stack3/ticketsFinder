@@ -12,15 +12,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import yaml
+import getopt
+import sys
 
-# load the configuration settings
-with open('config.yaml', 'r') as input_file:
-    config = yaml.load(input_file, yaml.FullLoader)
-
+config = {}
 opts = Options()
-# if operating in headless mode
-if config["headless"]:
-    opts.headless = True
 
 
 def get_soup_of_page(url: str) -> BeautifulSoup:
@@ -106,14 +102,87 @@ def send_email(recipients, dates_available) -> None:
     server.quit()
 
 
+def usage():
+    """
+    Print the usage information.
+    """
+    print(f"""Usage: {sys.argv[0]} [OPTION]...
+
+\t-t <minutes to run>, --time=<minutes to run>\tspecify duration of the script execution (in minutes)
+\t-r <list of recipients>, --recipients=<list of recipients>\tspecify the list of emails wish to receive alerts about available tickets
+\t-d, --debug\tload configuration settings from debug-config.yaml instead
+\t-v, --verbose\texplain what is being done
+\t-h, --help\tdisplay this help list and exit
+""")
+
+
+def parse_args():
+    """
+    Parse the arguments from the command line.
+    """
+    args_list = sys.argv[1:]
+    global config
+    global opts
+
+    # short options
+    short_options = "ht:r:vd"
+    # long options
+    long_options = ["help", "time=", "recipients=", "verbose", "debug"]
+
+    config_path = "config.yaml"
+    specified_config = {}
+    # parse the arguments
+    try:
+        arguments, values = getopt.getopt(
+            args_list, short_options, long_options)
+        # checking each argument
+        for current_arg, current_val in arguments:
+            if current_arg in ("-h", "--help"):
+                # print the usage information and exit
+                usage()
+                sys.exit(0)
+
+            elif current_arg in ("-t", "--time"):
+                # if the value received is not numeric or a negative number
+                if not current_val.isnumeric() or int(current_val) < 0:
+                    raise Exception(
+                        "Time to run should be numeric and positive")
+                specified_config["time_to_run"] = current_val
+
+            elif current_arg in ("-r", "--recipients"):
+                specified_config["recipients"] = current_val
+
+            # if the verbose flag is specified
+            elif current_arg in ("-v", "--verbose"):
+                specified_config["verbose"] = True
+
+            # if the debug option is specified
+            elif current_arg in ("-d", "--debug"):
+                config_path = "debug-config.yaml"
+
+    except Exception as err:
+        # output error, and return with an error code
+        print(f"Error parsing the arguments! {err}\n")
+        usage()
+        sys.exit(2)
+
+    # load the right configuration file
+    with open(config_path, 'r') as input_file:
+        config = yaml.load(input_file, yaml.FullLoader)
+
+    # update the configuration with the specified options
+    for arg, val in specified_config.items():
+        config[arg] = val
+
+    # if operating in headless mode
+    if config["headless"]:
+        opts.headless = True
+
+
 def main() -> None:
-    # here we get the params to run with.
-    minutes_to_run = input("Time to keep checking (in minutes):")
-    while not minutes_to_run.isnumeric() or int(minutes_to_run) > 34 * 60:
-        minutes_to_run = input("Time to keep checking (in minutes):")
-    print()
-    email_addresses = input(
-        "Email addresses to send alerts to (separated by commas):\n")
+    parse_args()
+    minutes_to_run = config["time_to_run"]
+    email_addresses = config["recipients"]
     recipients = [email.strip() for email in email_addresses.split(',')]
 
     # time to wait before searching again after finding tickets (in seconds)

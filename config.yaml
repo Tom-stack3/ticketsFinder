@@ -2,6 +2,11 @@
 email_address: example@mail.com
 email_password: password_example
 
+# ===== Default arguments =====
+time_to_run: 10 # time to run (in minutes)
+recipients: client.1@mail.com, client.2@mail.com,
+verbose: False
+
 # ===== Inner settings =====
 tickets_url: https://hermon.pres.global/vouchers
 closed_keyword: אזל
