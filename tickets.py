@@ -189,7 +189,7 @@ def parse_args():
 
     # if not in verbose mode
     if not config["verbose"]:
-        verboseprint = None
+        verboseprint = lambda *args: None
 
     # if operating in headless mode
     if config["headless"]:
@@ -200,7 +200,10 @@ def parse_args():
 def main() -> None:
     parse_args()
     minutes_to_run = config["time_to_run"]
-    email_addresses = config["recipients"]
+    email_addresses = config["recipients"].strip(",")
+    verboseprint(f"Running for {minutes_to_run} minutes")
+    verboseprint(
+        f"Sending emails to the following recipients: {email_addresses}")
     recipients = [email.strip() for email in email_addresses.split(',')]
 
     # time to wait before searching again after finding tickets (in seconds)
@@ -209,7 +212,7 @@ def main() -> None:
     # time to wait before searching again after not finding tickets (in seconds)
     wait_after_search = config["wait_after_search"]
 
-    print("\n--- started search ---\n")
+    log("Started search")
     start_time = time.time()
     end_time = start_time + 60 * int(minutes_to_run)
     while time.time() < end_time:
@@ -217,19 +220,21 @@ def main() -> None:
         # if list not empty, means we found some tickets
         if dates_available:
             # inform the recipients
+            verboseprint("Sending an email about the available tickets")
             send_email(recipients, dates_available)
 
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_find > end_time:
                 break
+            verboseprint(f"Sleeping for {wait_after_find} seconds..")
             time.sleep(wait_after_find)
         else:
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_search > end_time:
                 break
+            verboseprint(f"Sleeping for {wait_after_search} seconds..")
             time.sleep(wait_after_search)
-    print("\n--- search ended ---\n")
-    print("run ended after:", (time.time() - start_time) / 60, "minutes")
+    log("Search ended after:", (time.time() - start_time) / 60, "minutes")
 
 
 if __name__ == '__main__':
