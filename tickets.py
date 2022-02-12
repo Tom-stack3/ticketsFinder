@@ -19,11 +19,22 @@ config = {}
 opts = Options()
 
 
+def log(*args):
+    """
+    Log a message.
+    """
+    print('[+]', *args)
+
+
+verboseprint = log
+
+
 def get_soup_of_page(url: str) -> BeautifulSoup:
     """
     Get the html of the page using Selenium, load the html into a BeatifulSoup object and return it.
     """
     browser = Firefox(options=opts)
+    verboseprint(f"Getting html of {url}")
     browser.get(url)
     # wait for the calendar to appear
     # solution from: http://allselenium.info/wait-for-elements-python-selenium-webdriver/
@@ -31,6 +42,7 @@ def get_soup_of_page(url: str) -> BeautifulSoup:
     wait.until(ec.visibility_of_element_located(
         (By.XPATH, "//div[@class='v-calendar-weekly__day-label']")))
 
+    verboseprint("Parsing html using BeautifulSoup..")
     soup = BeautifulSoup(browser.page_source, "html.parser")
     browser.close()
     return soup
@@ -123,6 +135,7 @@ def parse_args():
     args_list = sys.argv[1:]
     global config
     global opts
+    global verboseprint
 
     # short options
     short_options = "ht:r:vd"
@@ -174,9 +187,14 @@ def parse_args():
     for arg, val in specified_config.items():
         config[arg] = val
 
+    # if not in verbose mode
+    if not config["verbose"]:
+        verboseprint = None
+
     # if operating in headless mode
     if config["headless"]:
         opts.headless = True
+        verboseprint("Operating in headless mode..")
 
 
 def main() -> None:
