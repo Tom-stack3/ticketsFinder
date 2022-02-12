@@ -106,7 +106,14 @@ def usage():
     """
     Print the usage information.
     """
-    pass
+    print(f"""Usage: {sys.argv[0]} [OPTION]...
+
+\t-t <minutes to run>, --time=<minutes to run>\tspecify duration of the script execution (in minutes)
+\t-r <list of recipients>, --recipients=<list of recipients>\tspecify the list of emails wish to receive alerts about available tickets
+\t-d, --debug\tload configuration settings from debug-config.yaml instead
+\t-v, --verbose\texplain what is being done
+\t-h, --help\tdisplay this help list and exit
+""")
 
 
 def parse_args():
@@ -155,7 +162,7 @@ def parse_args():
 
     except Exception as err:
         # output error, and return with an error code
-        print(f"Error parsing the arguments! {err}")
+        print(f"Error parsing the arguments! {err}\n")
         usage()
         sys.exit(2)
 
