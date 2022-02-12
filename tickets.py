@@ -19,11 +19,22 @@ config = {}
 opts = Options()
 
 
+def log(*args):
+    """
+    Log a message.
+    """
+    print('[+]', *args)
+
+
+verboseprint = log
+
+
 def get_soup_of_page(url: str) -> BeautifulSoup:
     """
     Get the html of the page using Selenium, load the html into a BeatifulSoup object and return it.
     """
     browser = Firefox(options=opts)
+    verboseprint(f"Getting html of {url}")
     browser.get(url)
     # wait for the calendar to appear
     # solution from: http://allselenium.info/wait-for-elements-python-selenium-webdriver/
@@ -31,6 +42,7 @@ def get_soup_of_page(url: str) -> BeautifulSoup:
     wait.until(ec.visibility_of_element_located(
         (By.XPATH, "//div[@class='v-calendar-weekly__day-label']")))
 
+    verboseprint("Parsing html using BeautifulSoup..")
     soup = BeautifulSoup(browser.page_source, "html.parser")
     browser.close()
     return soup
@@ -55,10 +67,10 @@ def find_available_tickets() -> list:
         if config["closed_keyword"] in str(search_result):
             continue
         elif config["success_keyword"] in str(search_result):
-            print(date_in_format, 'HERE!!')
+            log(f"{date_in_format} has tickets for sale!")
             dates_available.append(date_in_format)
         else:
-            print(date_in_format, 'failed')
+            log(f"Failed to get information on {date_in_format}!")
     return dates_available
 
 
@@ -123,6 +135,7 @@ def parse_args():
     args_list = sys.argv[1:]
     global config
     global opts
+    global verboseprint
 
     # short options
     short_options = "ht:r:vd"
@@ -174,15 +187,23 @@ def parse_args():
     for arg, val in specified_config.items():
         config[arg] = val
 
+    # if not in verbose mode
+    if not config["verbose"]:
+        verboseprint = lambda *args: None
+
     # if operating in headless mode
     if config["headless"]:
         opts.headless = True
+        verboseprint("Operating in headless mode..")
 
 
 def main() -> None:
     parse_args()
     minutes_to_run = config["time_to_run"]
-    email_addresses = config["recipients"]
+    email_addresses = config["recipients"].strip(",")
+    verboseprint(f"Running for {minutes_to_run} minutes")
+    verboseprint(
+        f"Sending emails to the following recipients: {email_addresses}")
     recipients = [email.strip() for email in email_addresses.split(',')]
 
     # time to wait before searching again after finding tickets (in seconds)
@@ -191,27 +212,32 @@ def main() -> None:
     # time to wait before searching again after not finding tickets (in seconds)
     wait_after_search = config["wait_after_search"]
 
-    print("\n--- started search ---\n")
+    log("Started search")
     start_time = time.time()
     end_time = start_time + 60 * int(minutes_to_run)
     while time.time() < end_time:
+        # print an empty line
+        print()
+        # get a list of available dates
         dates_available = find_available_tickets()
         # if list not empty, means we found some tickets
         if dates_available:
             # inform the recipients
+            verboseprint("Sending an email about the available tickets")
             send_email(recipients, dates_available)
 
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_find > end_time:
                 break
+            verboseprint(f"Sleeping for {wait_after_find} seconds..")
             time.sleep(wait_after_find)
         else:
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_search > end_time:
                 break
+            verboseprint(f"Sleeping for {wait_after_search} seconds..")
             time.sleep(wait_after_search)
-    print("\n--- search ended ---\n")
-    print("run ended after:", (time.time() - start_time) / 60, "minutes")
+    log(f"Search ended after {(time.time() - start_time) / 60:.2f} minutes")
 
 
 if __name__ == '__main__':
