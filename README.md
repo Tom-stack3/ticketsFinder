@@ -25,7 +25,7 @@ The script works with selenium Firefox, so Firefox needs to be installed.
 ##### Linux:
 In order to work with the selenium firefox-geckodriver, it needs to be installed:
 ```shell
-sudo apt-get install firefox-geckodriver
+sudo apt install firefox-geckodriver
 ```
 ##### Windows:
 To work with the selenium firefox-geckodriver, it can be installed [here](https://github.com/mozilla/geckodriver/releases/tag/v0.29.0).\
