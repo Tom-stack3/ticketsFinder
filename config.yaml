@@ -18,7 +18,3 @@ wait_after_find: 600
 wait_after_search: 30
 
 headless: True
-
-# ===== Logger settings =====
-# separator for logging
-separator: =====
