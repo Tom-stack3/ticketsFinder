@@ -237,7 +237,7 @@ def main() -> None:
                 break
             verboseprint(f"Sleeping for {wait_after_search} seconds..")
             time.sleep(wait_after_search)
-    log("Search ended after:", (time.time() - start_time) / 60, "minutes")
+    log(f"Search ended after {(time.time() - start_time) / 60:.2f} minutes")
 
 
 if __name__ == '__main__':
