@@ -1,16 +1,14 @@
 # Hermon Tickets Finder
 *ticketsFinder* is a Python script that looks for available tickets for Mount Hermon
-and sends an alert in Real-Time to all the emails interested.
+and sends alert in Real-Time to all the emails interested.
 
 ## How it works:
-Upon execution, the script asks for how many minutes the program should be running.
-Then the program asks for the email addresses to send alerts to.
-After giving the needed parameters, the script starts searching for tickets.
-
 Every fixed amount of seconds, using selenium, the script gets the HTML of the tickets page.
 The HTML is parsed using BeautifulSoup, and the script checks whether there are dates with available tickets.
 If so, the script sends an email to the email addresses specified, to notify about the tickets.
 Afterwards, the script sleeps for a fixed amount of time, and does the same process again.
+
+All the settings are defined in the [`config.yaml`](./config.yaml) file and can be changed according to your needs.
 
 ## Setup before run:
 
@@ -40,7 +38,7 @@ After installing and extracting the geckodriver.exe, copy it into one of your Sy
 The program sends alerts to the emails specified in the beginning of the run.\
 So before running the script, you need to fill in a working email address and a password for the email address you want the program to send the alerts from.
 
-Change the following lines in the `config.yaml` file: (lines 2-3)
+Change the following lines in the [`config.yaml`](./config.yaml) file: (lines 2-3)
 ```yaml
 # ===== Email settings =====
 email_address: example@mail.com
@@ -59,8 +57,8 @@ You can specify the time you want for the script to run and the email addresses 
 ./tickets.py -t 10 -r "example.1@mail.com, example.2@mail.com"
 ```
 You can use the `-v` or `--verbose` option for a more verbose output, and `-h` or `--help` to see the help list.
-In addition, you can edit the default values for all the command line options in the `config.yaml` file.
-That way you will be able to run the script without any additional arguments specified.
+In addition, you can edit the default values for all the command line options in the [`config.yaml`](./config.yaml) file.
+This way you will be able to run the script without specifying any additional arguments.
 
 That's it!
 Have fun skiing in the Hermon :)
