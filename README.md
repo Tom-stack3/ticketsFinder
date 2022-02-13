@@ -67,4 +67,4 @@ Have fun skiing in the Hermon :)
 
 ## Run example:
 
-![run example](./img/run_example.png)
+![run example](./img/run-example.png)
