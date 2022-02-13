@@ -19,7 +19,7 @@ config = {}
 opts = Options()
 
 
-def log(*args):
+def log(*args) -> None:
     """
     Log a message.
     """
@@ -74,7 +74,7 @@ def find_available_tickets() -> list:
     return dates_available
 
 
-def generate_email_body(dates_available) -> str:
+def generate_email_body(dates_available: list) -> str:
     """
     Generate the email body.
     """
@@ -91,7 +91,7 @@ Checked at: {today.strftime("%X %d/%m/%Y")}
     return text
 
 
-def send_email(recipients, dates_available) -> None:
+def send_email(recipients: str, dates_available: list) -> None:
     """
     Send an email with the available tickets to the specified recipients.
     """
@@ -102,7 +102,7 @@ def send_email(recipients, dates_available) -> None:
 
     msg['Subject'] = 'Found available tickets to Hermon!'
     msg['From'] = config["email_address"]
-    msg['Bcc'] = ', '.join(recipients)
+    msg['Bcc'] = recipients
 
     # add the body to the body of the email
     msg.attach(MIMEText(body, 'plain'))
@@ -114,7 +114,7 @@ def send_email(recipients, dates_available) -> None:
     server.quit()
 
 
-def usage():
+def usage() -> None:
     """
     Print the usage information.
     """
@@ -128,7 +128,7 @@ def usage():
 """)
 
 
-def parse_args():
+def parse_args() -> None:
     """
     Parse the arguments from the command line.
     """
@@ -204,7 +204,6 @@ def main() -> None:
     verboseprint(f"Running for {minutes_to_run} minutes")
     verboseprint(
         f"Sending emails to the following recipients: {email_addresses}")
-    recipients = [email.strip() for email in email_addresses.split(',')]
 
     # time to wait before searching again after finding tickets (in seconds)
     wait_after_find = config["wait_after_find"]
@@ -224,7 +223,7 @@ def main() -> None:
         if dates_available:
             # inform the recipients
             verboseprint("Sending an email about the available tickets")
-            send_email(recipients, dates_available)
+            send_email(email_addresses, dates_available)
 
             # if there is no time left, there is no need to wait
             if time.time() + wait_after_find > end_time:
