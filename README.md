@@ -1,6 +1,6 @@
 # Hermon Tickets Finder
 *ticketsFinder* is a Python script that looks for available tickets for Mount Hermon
-and sends alert in Real-Time to all the emails interested.
+and sends alerts in real-time to all the emails interested.
 
 ## How it works:
 Every fixed amount of seconds, using selenium, the script gets the HTML of the tickets page.
@@ -35,8 +35,8 @@ The selenium firefox-geckodriver can be installed [here](https://github.com/mozi
 After installing and extracting the geckodriver.exe, copy it into one of your System paths.
 
 ### Code setup:
-The program sends alerts to the emails specified in the beginning of the run.\
-So before running the script, you need to fill in a working email address and a password for the email address you want the program to send the alerts from.
+The script sends alerts to the emails specified in the beginning of the run.
+So before running the script, you need to fill in a working email address and a password for the email address you want the script to send the alerts from.
 
 Change the following lines in the [`config.yaml`](./config.yaml) file: (lines 2-3)
 ```yaml
@@ -47,7 +47,7 @@ email_password: password_example
 
  
 ## Running the script:
-After the setup, now you can run the python script.
+After the setup, you can run the python script.
 You can specify the time you want for the script to run and the email addresses you want to be notified in the command line arguments.
 ```shell
 # Run the script for 10 minutes, and send alerts to: example.1@mail.com, example.2@mail.com
