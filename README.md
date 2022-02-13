@@ -1,6 +1,5 @@
 # Hermon Tickets Finder
-*ticketsFinder* is a Python script that looks for available tickets for Mount Hermon
-and sends alerts in real-time to all the emails interested.
+A python script that looks for available tickets for Mount Hermon and sends alerts in real-time to all the emails interested.
 
 ## How it works:
 Every fixed amount of seconds, using selenium, the script gets the HTML of the tickets page.
