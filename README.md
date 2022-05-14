@@ -50,10 +50,10 @@ After the setup, you can run the python script.
 You can specify the time you want for the script to run and the email addresses you want to be notified in the command line arguments.
 ```shell
 # Run the script for 10 minutes, and send alerts to: example.1@mail.com, example.2@mail.com
-./tickets.py --time=10 --recipients="example.1@mail.com, example.2@mail.com"
+python tickets.py --time=10 --recipients="example.1@mail.com, example.2@mail.com"
 
 # The same as above, but shorter
-./tickets.py -t 10 -r "example.1@mail.com, example.2@mail.com"
+python tickets.py -t 10 -r "example.1@mail.com, example.2@mail.com"
 ```
 You can use the `-v` or `--verbose` option for a more verbose output, and `-h` or `--help` to see the help list.
 In addition, you can edit the default values for all the command line options in the [`config.yaml`](./config.yaml) file.
