@@ -8,7 +8,7 @@ recipients: client.1@mail.com, client.2@mail.com,
 verbose: False
 
 # ===== Inner settings =====
-tickets_url: https://hermon.pres.global/vouchers
+tickets_url: https://hermon.pres.global/ski
 closed_keyword: אזל
 success_keyword: יש
 
